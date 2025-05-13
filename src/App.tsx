@@ -6,6 +6,20 @@ function App() {
   const [changeDue, setChangeDue] = useState(12)
   const [changeGiven, setChangeGiven] = useState(0)
 
+  const handleMouseDown = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    if (event.button === 0) {
+      // Left click, increment change
+      setChangeGiven(changeGiven + 1);
+    } else {
+      // Right click, decrement change
+      if (changeGiven > 0) {
+        setChangeGiven(changeGiven - 1);
+      }
+    }
+  }
+
   const checkChange = () => {
     setMsg(changeGiven === changeDue ? 'Correct!' : 'Incorrect.');
 
@@ -26,7 +40,13 @@ function App() {
         <span className='amountNumber'>${changeGiven}</span>
       </p>
       <div>
-        <button onClick={() => setChangeGiven(changeGiven + 1)}>$1</button>
+        <button
+          title='Left click to add, right click to remove'
+          onMouseDown={handleMouseDown}
+          onContextMenu={(e) => e.preventDefault()}
+        >
+          $1
+        </button>
       </div>
       <div>
         <button

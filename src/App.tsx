@@ -6,16 +6,16 @@ function App() {
   const [changeDue, setChangeDue] = useState(12)
   const [changeGiven, setChangeGiven] = useState(0)
 
-  const handleMouseDown = (event: React.MouseEvent) => {
+  const handleMouseDown = (event: React.MouseEvent, amount: number) => {
     event.preventDefault();
 
     if (event.button === 0) {
       // Left click, increment change
-      setChangeGiven(changeGiven + 1);
+      setChangeGiven(changeGiven + amount);
     } else {
       // Right click, decrement change
-      if (changeGiven > 0) {
-        setChangeGiven(changeGiven - 1);
+      if (changeGiven - amount >= 0) {
+        setChangeGiven(changeGiven - amount);
       }
     }
   }
@@ -30,31 +30,40 @@ function App() {
 
   return (
     <>
-      <h1>{msg}</h1>
-      <p className='amount'>
-        <span className='amountLabel'>Change due</span>
-        <span className='amountNumber'>${changeDue}</span>
-      </p>
-      <p className='amount'>
-        <span className='amountLabel'>Change to give</span>
-        <span className='amountNumber'>${changeGiven}</span>
-      </p>
-      <div>
-        <button
-          title='Left click to add, right click to remove'
-          onMouseDown={handleMouseDown}
-          onContextMenu={(e) => e.preventDefault()}
-        >
-          $1
-        </button>
+      <div className='display'>
+        <h1>{msg}</h1>
+        <div className='amount'>
+          <div className='amountLabel'>Due</div>
+          <div className='amountNumber'>${changeDue}</div>
+        </div>
+        <div className='amount'>
+          <div className='amountLabel'>Giving</div>
+          <div className='amountNumber'>${changeGiven}</div>
+        </div>
       </div>
-      <div>
-        <button
-          onClick={checkChange}
-          disabled={changeGiven === 0}
-        >
-          Give change
-        </button>
+      <div className='buttons'>
+        <div className='button-group'>
+          {
+            [1, 2, 5].map(amount => (
+              <button
+                title='Left click to add, right click to remove'
+                onMouseDown={(e) => handleMouseDown(e, amount)}
+                onContextMenu={(e) => e.preventDefault()}
+                key={amount}
+              >
+                ${amount}
+              </button>
+            ))
+          }
+        </div>
+        <div className='button-group'>
+          <button
+            onClick={checkChange}
+            disabled={changeGiven === 0}
+          >
+            Give change
+          </button>
+        </div>
       </div>
     </>
   )

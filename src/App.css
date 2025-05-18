@@ -1,15 +1,26 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
+.app {
   text-align: center;
   min-height: 100vh;
+  min-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.incorrect {
+  animation: incorrect-to-neutral 1s linear;
+}
+
+.correct {
+  animation: correct-to-neutral 1s linear;
+}
+
 .display {
   padding: 2rem;
+}
+
+.score {
+  font-size: 40px;
 }
 
 .amount {
@@ -20,13 +31,20 @@
   margin: 1rem;
 }
 
-.amountLabel {
-  font-size: 18px;
-  margin-right: 12px;
+.dueLabel {
+  font-size: 24px;
 }
 
-.amountNumber {
-  font-size: 48px;
+.dueNumber {
+  font-size: 50px;
+}
+
+.givingLabel {
+  font-size: 18px;
+}
+
+.givingNumber {
+  font-size: 32px;
 }
 
 .buttons {
@@ -35,4 +53,14 @@
 
 button {
   margin: 0.5rem;
+}
+
+@keyframes correct-to-neutral {
+  0% { background-color: #239930; }
+  100% { background-color: #1a1a1a; }
+}
+
+@keyframes incorrect-to-neutral {
+  0% { background-color: #C7332A; }
+  100% { background-color: #1a1a1a; }
 }

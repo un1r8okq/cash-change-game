@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import './App.css'
 
+const lastResultTypes = {
+  correct: 'correct',
+  incorrect: 'incorrect',
+  unknown: 'unknown',
+} as const;
+
+type EnumLike<T> = T[keyof T];
+type LastResultType = EnumLike<typeof lastResultTypes>;
+
 function App() {
-  const [msg, setMsg] = useState('')
+  const [score, setScore] = useState(0)
+  const [lastResultType, setLastResultType] = useState<LastResultType>(lastResultTypes.unknown)
   const [changeDue, setChangeDue] = useState(12)
   const [changeGiven, setChangeGiven] = useState(0)
 
@@ -21,24 +31,31 @@ function App() {
   }
 
   const checkChange = () => {
-    setMsg(changeGiven === changeDue ? 'Correct!' : 'Incorrect.');
+    if (changeGiven === changeDue) {
+      setLastResultType(lastResultTypes.correct);
+      setScore(score + 10)
+    } else {
+      setLastResultType(lastResultTypes.incorrect);
+      setScore(score - 5)
+    }
 
     const maxChangeDue = 10;
-    setChangeDue(Math.floor(Math.random() * maxChangeDue));
+    setChangeDue(Math.floor(Math.random() * maxChangeDue + 1));
     setChangeGiven(0);
+    setTimeout(() => setLastResultType(lastResultTypes.unknown), 1000);
   };
 
   return (
-    <>
+    <div className={`app ${lastResultType}`}>
       <div className='display'>
-        <h1>{msg}</h1>
+        <div className='score'>🏆 Score: {score}</div>
         <div className='amount'>
-          <div className='amountLabel'>Due</div>
-          <div className='amountNumber'>${changeDue}</div>
+          <div className='dueLabel'>Due</div>
+          <div className='dueNumber'>${changeDue}</div>
         </div>
         <div className='amount'>
-          <div className='amountLabel'>Giving</div>
-          <div className='amountNumber'>${changeGiven}</div>
+          <div className='givingLabel'>Giving</div>
+          <div className='givingNumber'>${changeGiven}</div>
         </div>
       </div>
       <div className='buttons'>
@@ -65,7 +82,7 @@ function App() {
           </button>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
